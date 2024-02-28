@@ -55,4 +55,11 @@ public class NameController {
         }
     } 
     
+    @GetMapping("/names/frequency")
+    public int getFrequency(@RequestParam String name) {
+        return listOfNames.stream()
+                .filter(n -> n.getName().equalsIgnoreCase(name))
+                .mapToInt(Name::getAnzahl)
+                .sum();
+    }
 }
