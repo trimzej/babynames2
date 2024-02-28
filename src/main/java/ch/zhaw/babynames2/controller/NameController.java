@@ -15,6 +15,7 @@ import com.opencsv.CSVReader;
 
 import ch.zhaw.babynames2.model.Name;
 
+
 @RestController
 public class NameController {
     private ArrayList<Name> listOfNames;
@@ -39,4 +40,10 @@ public class NameController {
             }
         }
     }
+
+    @GetMapping("names/count")
+    public long getCount() {
+        return listOfNames.size();
+    }
+    
 }
