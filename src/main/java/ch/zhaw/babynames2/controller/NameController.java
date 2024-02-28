@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opencsv.CSVReader;
@@ -41,9 +42,17 @@ public class NameController {
         }
     }
 
-    @GetMapping("names/count")
-    public long getCount() {
-        return listOfNames.size();
-    }
+    @GetMapping("/names/count")
+    public long getCount(@RequestParam(required = false) String sex) {
+        if (sex != null) {
+            // Filtern der Liste nach dem Geschlecht und Zählen der Einträge
+            return listOfNames.stream()
+                    .filter(name -> name.getGeschlecht().equalsIgnoreCase(sex))
+                    .count();
+        } else {
+            // Rückgabe der Gesamtgröße der Liste, wenn kein Geschlecht angegeben ist
+            return listOfNames.size();
+        }
+    } 
     
 }
