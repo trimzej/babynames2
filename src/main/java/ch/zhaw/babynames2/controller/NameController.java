@@ -5,9 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,4 +65,16 @@ public class NameController {
                 .mapToInt(Name::getAnzahl)
                 .sum();
     }
+
+    /*
+    
+    @GetMapping("names/name")
+    public ResponseEntity<List<String>> filterNames (
+        @RequestParam String sex,
+        @RequestParam String start,
+        @RequestParam int length) {
+
+    }
+
+     */
 }
