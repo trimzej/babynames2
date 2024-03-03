@@ -93,6 +93,7 @@ public class NameController {
         }
     
         return ResponseEntity.ok(filteredNames); // Rückgabe der gefilterten Namen
+        
     }
     
      
