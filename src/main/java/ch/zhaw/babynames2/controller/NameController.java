@@ -5,9 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,4 +65,32 @@ public class NameController {
                 .mapToInt(Name::getAnzahl)
                 .sum();
     }
+    
+    @GetMapping("/names/name")
+    public ResponseEntity<List<String>> filterNames(
+        @RequestParam String sex,
+        @RequestParam String start,
+        @RequestParam int length) {
+    
+        // Validierung der Eingabeparameter
+        if (sex == null || start == null || length <= 0) {
+            return ResponseEntity.badRequest().body(null); // Ungültige Eingabe
+        }
+    
+        // Filtern der Namen basierend auf den Parametern
+        List<String> filteredNames = listOfNames.stream()
+            .filter(name -> name.getGeschlecht().equalsIgnoreCase(sex))
+            .filter(name -> name.getName().startsWith(start))
+            .filter(name -> name.getName().length() <= length)
+            .map(Name::getName)
+            .collect(Collectors.toList());
+    
+        // Überprüfung, ob gefilterte Namen vorhanden sind
+        if (filteredNames.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Keine Namen gefunden
+        }
+    
+        return ResponseEntity.ok(filteredNames); // Rückgabe der gefilterten Namen
+    }
+     
 }
