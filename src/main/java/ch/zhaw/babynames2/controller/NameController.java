@@ -65,16 +65,32 @@ public class NameController {
                 .mapToInt(Name::getAnzahl)
                 .sum();
     }
-
-    /*
     
-    @GetMapping("names/name")
-    public ResponseEntity<List<String>> filterNames (
+    @GetMapping("/names/name")
+    public ResponseEntity<List<String>> filterNames(
         @RequestParam String sex,
         @RequestParam String start,
         @RequestParam int length) {
-
+    
+        // Validierung der Eingabeparameter
+        if (sex == null || start == null || length <= 0) {
+            return ResponseEntity.badRequest().body(null); // Ungültige Eingabe
+        }
+    
+        // Filtern der Namen basierend auf den Parametern
+        List<String> filteredNames = listOfNames.stream()
+            .filter(name -> name.getGeschlecht().equalsIgnoreCase(sex))
+            .filter(name -> name.getName().startsWith(start))
+            .filter(name -> name.getName().length() <= length)
+            .map(Name::getName)
+            .collect(Collectors.toList());
+    
+        // Überprüfung, ob gefilterte Namen vorhanden sind
+        if (filteredNames.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Keine Namen gefunden
+        }
+    
+        return ResponseEntity.ok(filteredNames); // Rückgabe der gefilterten Namen
     }
-
-     */
+     
 }
