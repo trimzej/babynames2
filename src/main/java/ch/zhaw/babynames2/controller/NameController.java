@@ -77,10 +77,12 @@ public class NameController {
             return ResponseEntity.badRequest().body(null); // Ungültige Eingabe
         }
     
+        String startLowerCase = start.toLowerCase(); // Konvertiere `start` in Kleinbuchstaben
+    
         // Filtern der Namen basierend auf den Parametern
         List<String> filteredNames = listOfNames.stream()
             .filter(name -> name.getGeschlecht().equalsIgnoreCase(sex))
-            .filter(name -> name.getName().startsWith(start))
+            .filter(name -> name.getName().toLowerCase().startsWith(startLowerCase)) // Ignoriere Groß-/Kleinschreibung
             .filter(name -> name.getName().length() <= length)
             .map(Name::getName)
             .collect(Collectors.toList());
@@ -92,5 +94,6 @@ public class NameController {
     
         return ResponseEntity.ok(filteredNames); // Rückgabe der gefilterten Namen
     }
+    
      
 }
